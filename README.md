@@ -7,6 +7,60 @@ Este proyecto consiste en un sistema de control remoto y monitoreo para una faja
 
 La aplicación móvil integra un contador de cajas inteligente que suma al detectar la entrada y resta al detectar la salida en tiempo real.
 
+## Arquitectura del Sistema
+El sistema sigue un modelo de comunicación Pub/Sub a través de un bróker MQTT:
+
+```mermaid
+graph TD
+    subgraph "Hardware (ESP32)"
+        S1[Sensor Ultrasonido Entrada] --> ESP[ESP32 Central]
+        S2[Sensor Ultrasonido Salida] --> ESP
+        ESP --> L298N[Controlador Motor L298N]
+        ESP --> OLED[Pantalla OLED SSD1306]
+    end
+
+    subgraph "Nube"
+        ESP -- "Publica Telemetría / Suscribe Comandos" --- Broker[Broker MQTT Mosquitto]
+    end
+
+    subgraph "App Android"
+        Broker -- "Publica Comandos / Suscribe Telemetría" --- App[Aplicación ControlINN]
+    end
+```
+
+## Diagrama de Conexión de Hardware
+A continuación se detalla la conexión de los componentes al ESP32:
+
+| Componente | Pin ESP32 | Función |
+| :--- | :--- | :--- |
+| **L298N** | GPIO 13 (PWM) | ENA (Velocidad) |
+| **L298N** | GPIO 27 | IN1 (Dirección) |
+| **L298N** | GPIO 4 | IN2 (Dirección) |
+| **HC-SR04 1** | GPIO 5 | TRIG (Entrada) |
+| **HC-SR04 1** | GPIO 18 | ECHO (Entrada) |
+| **HC-SR04 2** | GPIO 2 | TRIG (Salida) |
+| **HC-SR04 2** | GPIO 15 | ECHO (Salida) |
+| **OLED** | GPIO 21 (SDA) | Datos I2C |
+| **OLED** | GPIO 22 (SCL) | Reloj I2C |
+
+## Configuración del Broker MQTT
+El sistema utiliza un bróker Mosquitto alojado en un VPS con la siguiente configuración:
+
+### Credenciales de Conexión
+- **Servidor:** `38.250.116.214`
+- **Puerto:** `1883`
+- **Usuario:** `joseph`
+- **Contraseña:** `1234`
+- **Client ID (App):** `Android_Faja_Remote`
+- **Client ID (ESP32):** `ESP32_Faja_Joseph`
+
+### Tópicos (Topics)
+| Tópico | Dirección | Función | Mensaje |
+| :--- | :--- | :--- | :--- |
+| `/faja/comando` | App -> ESP32 | Control de modo y motor | `A`, `M`, `ON`, `OFF`, `D` |
+| `/faja/velocidad` | App -> ESP32 | Ajuste de velocidad | `0-255` (String) |
+| `/faja/telemetria` | ESP32 -> App | Estado de sensores y motor | JSON: `{"s1":x, "s2":y, "vel":z}` |
+
 ## Requisitos de Hardware
 1. **Microcontrolador:** ESP32 (NodeMCU o similar).
 2. **Sensores:** 2x Sensores Ultrasonidos HC-SR04 (Entrada y Salida).
@@ -17,24 +71,16 @@ La aplicación móvil integra un contador de cajas inteligente que suma al detec
 
 ## Instrucciones de Instalación
 
-### 1. Configuración del ESP32 (Hardware)
-Conecta los componentes según los pines definidos en el código:
-- **L298N (ENA):** Pin 13 (ESP32)
-- **L298N (IN1/IN2):** Pines 27 y 4 (ESP32)
-- **Sensor Entrada (TRIG/ECHO):** Pines 5 y 18 (ESP32)
-- **Sensor Salida (TRIG/ECHO):** Pines 2 y 15 (ESP32)
-- **OLED (SDA/SCL):** Pines 21 y 22 (ESP32)
-
-### 2. Carga del Código (Arduino IDE)
+### 1. Carga del Código (Arduino IDE)
 1. Instala las librerías necesarias: `PubSubClient`, `Adafruit GFX`, `Adafruit SSD1306`.
 2. Abre el código proporcionado abajo.
 3. Asegúrate de que las credenciales de red sean correctas.
 4. Carga el código al dispositivo.
 
-### 3. Aplicación Android
+### 2. Aplicación Android
 1. Abre el proyecto `ControlINN` en **Android Studio**.
 2. Sincroniza el proyecto con Gradle.
-3. Compila y ejecuta la aplicación en un dispositivo físico o emulador con acceso a internet.
+3. Compila y ejecuta la aplicación en un dispositivo físico o emulador.
 
 ---
 
