@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Desconectado"
+        android:textSize="18sp"
+        android:layout_marginBottom="24dp" />
+
+    <TextView
+        android:id="@+id/tvBoxCountLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cajas en Faja:"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvBoxCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/tvSensors"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="S1: -- cm | S2: -- cm"
+        android:textSize="14sp"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/btnResetCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RESETEAR CONTADOR"
+        android:textSize="12sp"
+        android:layout_marginBottom="24dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:id="@+id/btnAuto"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="MODO AUTO"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/btnManual"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="MODO MANUAL"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutManualControls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/btnOn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ENCENDER FAJA"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnOff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="APAGAR FAJA"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnReverse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="INVERTIR DIRECCIÓN"
+            android:layout_marginBottom="16dp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Velocidad"
+        android:layout_marginTop="16dp" />
+
+    <SeekBar
+        android:id="@+id/sbSpeed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="255"
+        android:progress="0"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/btnEmergency"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="PARO DE EMERGENCIA"
+        android:backgroundTint="#FF0000"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textSize="18sp" />
+
+</LinearLayout>
